@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="/index.html">Home</a>
+        <a href="/register.html">Register</a>
+        <a href="/login.html">Login</a>
+    </div>
+    <div class="container">
+        <h1>Create Event</h1>
+        <form action="/createEvent" method="POST">
+            <input type="text" name="name" placeholder="Event Name" required>
+            <input type="date" name="date" placeholder="Date" required>
+            <input type="time" name="time" placeholder="Time" required>
+            <input type="text" name="location" placeholder="Location" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <button type="submit">Create Event</button>
+        </form>
+
+        <h2>All Events</h2>
+        <ul id="event-list"></ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    fetch('/events')
+        .then(response => response.json())
+        .then(events => {
+            const eventList = document.getElementById('event-list');
+            events.forEach(event => {
+                const li = document.createElement('li');
+                
+                // Format the date as YYYY-MM-DD
+                const eventDate = new Date(event.date);
+                const formattedDate = eventDate.toISOString().slice(0, 10);
+
+                // Display the event information with formatted date
+                li.textContent = `${event.name} - ${formattedDate} - ${event.time} - ${event.location}`;
+                eventList.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+});
+
+    </script>
+</body>
+</html>
